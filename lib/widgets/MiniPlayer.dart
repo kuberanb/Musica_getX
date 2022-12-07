@@ -3,7 +3,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:musica/models/songs.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
-import 'package:musica/screens/ScreenNowPlaying.dart';
+import 'package:musica/views/ScreenNowPlaying.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class MiniPlayer extends StatefulWidget {

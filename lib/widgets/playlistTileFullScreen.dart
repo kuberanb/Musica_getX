@@ -9,7 +9,7 @@ import 'package:musica/palettes/ColorPalettes.dart';
 import 'package:musica/widgets/CreatedPlaylist_ListTile.dart';
 import 'package:musica/widgets/Song_List_Tile.dart';
 
-import '../screens/ScreenNavigation.dart';
+import '../views/ScreenNavigation.dart';
 
 class PlaylistTileFullScreen extends StatefulWidget {
   const PlaylistTileFullScreen({required this.playlistName, super.key});

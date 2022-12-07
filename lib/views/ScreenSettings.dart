@@ -2,7 +2,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
-import 'package:musica/screens/ScreenSettingTile.dart';
+import 'package:musica/views/ScreenSettingTile.dart';
 import 'package:musica/widgets/SettingsTile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share_plus/share_plus.dart';

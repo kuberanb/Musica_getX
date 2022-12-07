@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musica/models/songs.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
-import 'package:musica/screens/ScreenFavouriteList.dart';
+import 'package:musica/views/ScreenFavouriteList.dart';
 
 class CustomPlaylist extends StatelessWidget {
   const CustomPlaylist(

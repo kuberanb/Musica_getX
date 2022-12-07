@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
-import 'package:musica/screens/ScreenHomeList.dart';
-import 'package:musica/screens/ScreenSettings.dart';
+import 'package:musica/views/ScreenHomeList.dart';
+import 'package:musica/views/ScreenSettings.dart';
 
 import 'ScreenPlaylist.dart';
 

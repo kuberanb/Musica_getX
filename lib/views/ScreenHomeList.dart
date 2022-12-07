@@ -6,7 +6,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:musica/functions/MiscellaneousFunctions.dart';
 import 'package:musica/models/songs.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
-import 'package:musica/screens/ScreenSearch.dart';
+import 'package:musica/views/ScreenSearch.dart';
 import 'package:musica/widgets/Song_List_Tile.dart';
 
 class ScreenHomeList extends StatefulWidget {
