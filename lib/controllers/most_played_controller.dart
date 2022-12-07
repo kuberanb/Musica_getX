@@ -1,12 +1,17 @@
+
+
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:musica/models/songs.dart';
 
-class MostPlayed {
- static Box<Songs> songBox = Hive.box<Songs>('Songs');
+class MostPlayedController extends GetxController{
 
- static Box<List> playlistBox = Hive.box<List>('Playlist');
 
-  static addSongToPlaylist(String songId) async {
+ Box<Songs> songBox = Hive.box<Songs>('Songs');
+
+  Box<List> playlistBox = Hive.box<List>('Playlist');
+
+   addSongToPlaylist(String songId) async {
     final mostPlayedlist =
         playlistBox.get('Most Played')!.toList().cast<Songs>();
 
@@ -31,4 +36,7 @@ class MostPlayed {
       }
     }
   }
+
+
+
 }

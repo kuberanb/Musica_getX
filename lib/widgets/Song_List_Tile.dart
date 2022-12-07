@@ -1,14 +1,16 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:musica/controllers/Favourite_controller.dart';
+import 'package:musica/controllers/recents_controller.dart';
 import 'package:musica/functions/MiscellaneousFunctions.dart';
 import 'package:musica/models/songs.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../functions/Favourites.dart';
-import '../functions/Recents.dart';
 
 class SongListTile extends StatefulWidget {
   const SongListTile({
@@ -36,6 +38,10 @@ class _SongListTileState extends State<SongListTile> {
 
   Box<List> playlistBox = Hive.box<List>('Playlist');
 
+  final recentsController = Get.put(RecentsController());
+
+  final favouriteController = Get.put(FavouriteController());
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -52,7 +58,7 @@ class _SongListTileState extends State<SongListTile> {
         child: ListTile(
           
           onTap: () {
-            Recents.addSongsToRecents(songId: widget.songList[widget.index].id);
+            recentsController.addSongsToRecents(songId: widget.songList[widget.index].id);
             showMiniPlayer(context: context, index: widget.index, songList: widget.songList, audioPlayer: widget.audioPlayer);
 
 
@@ -104,27 +110,34 @@ class _SongListTileState extends State<SongListTile> {
                 ),
               ),
 
-              
-              IconButton(
+              GetBuilder(
+                init: favouriteController,
+                builder: ((controller) => 
+               
+               IconButton(
                 onPressed: () {
-                  Favourites.addSongToFavourites(
+                  favouriteController.addSongToFavourites(
                     context: context,
                     id: widget.songList[widget.index].id,
                   );
-                  setState(() {
-                    Favourites.isThisFavourite(
-                      id: widget.songList[widget.index].id,
-                    );
-                  });
+                     favouriteController.update();
                 },
                 icon: Icon(
-                  Favourites.isThisFavourite(
+                  
+                  favouriteController.isThisFavourite(
                     id: widget.songList[widget.index].id,
                   ),
+                  
                   color: kWhite,
                   size: 25,
                 ),
+              )
+                ),
+              
               ),
+
+              
+              
             ],
           ),
         ),

@@ -1,16 +1,13 @@
-import 'dart:ui';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:musica/functions/Favourites.dart';
-import 'package:musica/functions/Recents.dart';
+import 'package:get/get.dart';
+import 'package:musica/controllers/Favourite_controller.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 
-import '../models/songs.dart';
-import '../widgets/CustomIconButton.dart';
 
 class ScreenNowPlaying extends StatefulWidget {
   const ScreenNowPlaying({
@@ -33,9 +30,11 @@ class ScreenNowPlaying extends StatefulWidget {
 class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
   IconData? favIcon;
 
+  final favouritesController = Get.find<FavouriteController>();
+
   @override
   void initState() {
-    favIcon = Favourites.isThisFavourite(
+    favIcon = favouritesController.isThisFavourite(
       id: widget.id,
     );
 
@@ -134,7 +133,7 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                       ),
                     ),
                     child: QueryArtworkWidget(
-                      artworkBorder: BorderRadius.all(Radius.zero),
+                      artworkBorder: const BorderRadius.all(Radius.zero),
                       type: ArtworkType.AUDIO,
                       id: int.parse(myAudio.metas.id!),
                       nullArtworkWidget: ClipRect(
@@ -157,7 +156,7 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                       Expanded(
                           child: Text(
                         widget.audioPlayer.getCurrentAudioTitle,
-                        style: TextStyle(color: kWhite, fontSize: 20),
+                        style: const TextStyle(color: kWhite, fontSize: 20),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       )),
@@ -165,7 +164,7 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            Favourites.addSongToFavourites(
+                            favouritesController.addSongToFavourites(
                               context: context,
                               id: myAudio.metas.id!,
                             );
@@ -178,7 +177,7 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                         // )
 
                         icon: Icon(
-                          Favourites.isThisFavourite(id: myAudio.metas.id!),
+                          favouritesController.isThisFavourite(id: myAudio.metas.id!),
                           color: kWhite,
                           size: 25,
                         ),
@@ -247,8 +246,8 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                           shuffleButtonPressed();
                         },
                         icon: (isShuffle == true)
-                            ? Icon(Icons.shuffle, color: kWhite, size: 32)
-                            : Icon(Icons.shuffle, color: kPink, size: 32),
+                            ? const Icon(Icons.shuffle, color: kWhite, size: 32)
+                            : const  Icon(Icons.shuffle, color: kPink, size: 32),
                       ),
                       IconButton(
                           disabledColor: kWhite,
@@ -276,14 +275,14 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                           onPressed: () {
                             widget.audioPlayer.next();
                           },
-                          icon: Icon(Icons.skip_next,
+                          icon: const Icon(Icons.skip_next,
                               color: Colors.white, size: 32)),
                       IconButton(
                         disabledColor: kWhite,
                         focusColor: kPink,
                         icon: (isLoop == true)
-                            ? Icon(Icons.repeat, color: Colors.white, size: 32)
-                            : Icon(Icons.repeat_one,
+                            ? const Icon(Icons.repeat, color: Colors.white, size: 32)
+                            : const Icon(Icons.repeat_one,
                                 color: Colors.white, size: 32),
                         onPressed: () {
                           repeatButtonPressed();

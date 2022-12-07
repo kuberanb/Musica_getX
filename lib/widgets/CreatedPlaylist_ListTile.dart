@@ -1,15 +1,17 @@
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:musica/controllers/Favourite_controller.dart';
+import 'package:musica/controllers/recents_controller.dart';
 import 'package:musica/functions/MiscellaneousFunctions.dart';
 import 'package:musica/models/songs.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../functions/Favourites.dart';
-import '../functions/Recents.dart';
 
 class CreatedPlaylistTile extends StatefulWidget {
   const CreatedPlaylistTile({super.key,
@@ -37,6 +39,8 @@ class _CreatedPlaylistTileState extends State<CreatedPlaylistTile> {
  Box<Songs> songBox = Hive.box<Songs>('Songs');
 
   Box<List> playlistBox = Hive.box<List>('Playlist');
+  final recentsController = Get.find<RecentsController>();
+  final favouritesContoller = Get.find<FavouriteController>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +58,7 @@ class _CreatedPlaylistTileState extends State<CreatedPlaylistTile> {
         child: ListTile(
           
           onTap: () {
-            Recents.addSongsToRecents(songId: widget.songList[widget.index].id);
+            recentsController.addSongsToRecents(songId: widget.songList[widget.index].id);
             showMiniPlayer(context: context, index: widget.index, songList: widget.songList, audioPlayer: widget.audioPlayer);
 
 
@@ -109,18 +113,18 @@ class _CreatedPlaylistTileState extends State<CreatedPlaylistTile> {
               
               IconButton(
                 onPressed: () {
-                  Favourites.addSongToFavourites(
+                  favouritesContoller.addSongToFavourites(
                     context: context,
                     id: widget.songList[widget.index].id,
                   );
                   setState(() {
-                    Favourites.isThisFavourite(
+                    favouritesContoller.isThisFavourite(
                       id: widget.songList[widget.index].id,
                     );
                   });
                 },
                 icon: Icon(
-                  Favourites.isThisFavourite(
+                  favouritesContoller.isThisFavourite(
                     id: widget.songList[widget.index].id,
                   ),
                   color: kWhite,
