@@ -110,18 +110,18 @@ class _CreatedPlaylistTileState extends State<CreatedPlaylistTile> {
                 ),
               ),
 
-              
-              IconButton(
+            GetBuilder(
+              init: favouritesContoller,
+              builder: ((controller) => IconButton(
                 onPressed: () {
                   favouritesContoller.addSongToFavourites(
                     context: context,
                     id: widget.songList[widget.index].id,
                   );
-                  setState(() {
-                    favouritesContoller.isThisFavourite(
-                      id: widget.songList[widget.index].id,
-                    );
-                  });
+                  favouritesContoller.update();
+                    // favouritesContoller.isThisFavourite(
+                    //   id: widget.songList[widget.index].id,
+                    // );                
                 },
                 icon: Icon(
                   favouritesContoller.isThisFavourite(
@@ -130,7 +130,11 @@ class _CreatedPlaylistTileState extends State<CreatedPlaylistTile> {
                   color: kWhite,
                   size: 25,
                 ),
-              ),
+              ) ),),
+              
+              
+
+
             ],
           ),
         ),

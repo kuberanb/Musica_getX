@@ -1,13 +1,12 @@
-
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:musica/controllers/Favourite_controller.dart';
+import 'package:musica/controllers/mini_player_controller.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
-
 
 class ScreenNowPlaying extends StatefulWidget {
   const ScreenNowPlaying({
@@ -31,6 +30,7 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
   IconData? favIcon;
 
   final favouritesController = Get.find<FavouriteController>();
+  final miniPlayerController = Get.find<MiniPlayerController>();
 
   @override
   void initState() {
@@ -41,40 +41,35 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
     super.initState();
   }
 
-  bool isPlaying = true;
-  bool isLoop = true;
-  bool isShuffle = true;
+  // bool isPlaying = true;
+  // bool isLoop = true;
+  // bool isShuffle = true;
 
-  void playOrPauseButtonPressed() async {
-    if (isPlaying == true) {
-      await widget.audioPlayer.pause();
-      setState(() {
-        isPlaying = false;
-      });
-    } else if (isPlaying == false) {
-      await widget.audioPlayer.play();
-      setState(() {
-        isPlaying = true;
-      });
+  void playOrPauseButtonPressed() {
+    if (miniPlayerController.isPlaying == true) {
+      widget.audioPlayer.pause();
+
+      miniPlayerController.isPlaying = false;
+    } else if (miniPlayerController.isPlaying == false) {
+      widget.audioPlayer.play();
+
+      miniPlayerController.isPlaying = true;
     }
   }
 
   void shuffleButtonPressed() {
-    setState(() {
-      widget.audioPlayer.toggleShuffle();
-      isShuffle = !isShuffle;
-    });
+    widget.audioPlayer.toggleShuffle();
+    miniPlayerController.isShuffle = !miniPlayerController.isShuffle;
   }
 
   void repeatButtonPressed() {
-    if (isLoop == true) {
+    if (miniPlayerController.isLoop == true) {
       widget.audioPlayer.setLoopMode(LoopMode.single);
     } else {
       widget.audioPlayer.setLoopMode(LoopMode.playlist);
     }
-    setState(() {
-      isLoop = !isLoop;
-    });
+
+    miniPlayerController.isLoop = !miniPlayerController.isLoop;
   }
 
   Audio find(List<Audio> source, String fromPath) {
@@ -94,6 +89,7 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
+            miniPlayerController.update();
           },
         ),
         // centerTitle: true,
@@ -161,26 +157,24 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                         overflow: TextOverflow.ellipsis,
                       )),
                       // SizedBox(width: 0.2*screenWidth,),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            favouritesController.addSongToFavourites(
-                              context: context,
-                              id: myAudio.metas.id!,
-                            );
-                          });
-                        },
-                        // icon: Icon(
-                        //   Icons.favorite_border_sharp,
-                        //   color: kWhite,
-                        //   size: 25,
-                        // )
 
-                        icon: Icon(
-                          favouritesController.isThisFavourite(id: myAudio.metas.id!),
-                          color: kWhite,
-                          size: 25,
-                        ),
+                      GetBuilder(
+                        init: favouritesController,
+                        builder: ((controller) => IconButton(
+                              onPressed: () {
+                                favouritesController.addSongToFavourites(
+                                  context: context,
+                                  id: myAudio.metas.id!,
+                                );
+                                favouritesController.update();
+                              },
+                              icon: Icon(
+                                favouritesController.isThisFavourite(
+                                    id: myAudio.metas.id!),
+                                color: kWhite,
+                                size: 25,
+                              ),
+                            )),
                       ),
                     ],
                   ),
@@ -241,53 +235,69 @@ class _ScreenNowPlayingState extends State<ScreenNowPlaying> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      IconButton(
-                        onPressed: () async {
-                          shuffleButtonPressed();
-                        },
-                        icon: (isShuffle == true)
-                            ? const Icon(Icons.shuffle, color: kWhite, size: 32)
-                            : const  Icon(Icons.shuffle, color: kPink, size: 32),
-                      ),
+                      GetBuilder(
+                          init: miniPlayerController,
+                          builder: ((controller) => IconButton(
+                                onPressed: () {
+                                  shuffleButtonPressed();
+                                  miniPlayerController.update();
+                                },
+                                icon: (miniPlayerController.isShuffle == true)
+                                    ? const Icon(Icons.shuffle,
+                                        color: kWhite, size: 32)
+                                    : const Icon(Icons.shuffle,
+                                        color: kPink, size: 32),
+                              ))),
                       IconButton(
                           disabledColor: kWhite,
                           focusColor: kPink,
                           onPressed: () {
                             widget.audioPlayer.previous();
                           },
-                          icon:const Icon(Icons.skip_previous_rounded,
+                          icon: const Icon(Icons.skip_previous_rounded,
                               color: Colors.white, size: 32)),
+                      GetBuilder(
+                        init: miniPlayerController,
+                        builder: ((controller) => IconButton(
+                              disabledColor: kWhite,
+                              focusColor: kPink,
+                              icon: Icon(
+                                (miniPlayerController.isPlaying == true)
+                                    ? Icons.pause
+                                    : Icons.play_arrow,
+                                color: kWhite,
+                                size: 35,
+                              ),
+                              onPressed: () {
+                                playOrPauseButtonPressed();
+                                miniPlayerController.update();
+                              },
+                            )),
+                      ),
                       IconButton(
                         disabledColor: kWhite,
                         focusColor: kPink,
-                        icon: Icon(
-                          (isPlaying == true) ? Icons.pause : Icons.play_arrow,
-                          color: kWhite,
-                          size: 35,
-                        ),
                         onPressed: () {
-                          playOrPauseButtonPressed();
+                          widget.audioPlayer.next();
                         },
+                        icon: const Icon(Icons.skip_next,
+                            color: Colors.white, size: 32),
                       ),
-                      IconButton(
-                          disabledColor: kWhite,
-                          focusColor: kPink,
-                          onPressed: () {
-                            widget.audioPlayer.next();
-                          },
-                          icon: const Icon(Icons.skip_next,
-                              color: Colors.white, size: 32)),
-                      IconButton(
-                        disabledColor: kWhite,
-                        focusColor: kPink,
-                        icon: (isLoop == true)
-                            ? const Icon(Icons.repeat, color: Colors.white, size: 32)
-                            : const Icon(Icons.repeat_one,
-                                color: Colors.white, size: 32),
-                        onPressed: () {
-                          repeatButtonPressed();
-                        },
-                      ),
+                      GetBuilder(
+                          init: miniPlayerController,
+                          builder: ((controller) => IconButton(
+                                disabledColor: kWhite,
+                                focusColor: kPink,
+                                icon: (miniPlayerController.isLoop == true)
+                                    ? const Icon(Icons.repeat,
+                                        color: Colors.white, size: 32)
+                                    : const Icon(Icons.repeat_one,
+                                        color: Colors.white, size: 32),
+                                onPressed: () {
+                                  repeatButtonPressed();
+                                  miniPlayerController.update();
+                                },
+                              ))),
                     ],
                   ),
                 ],
