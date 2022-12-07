@@ -103,7 +103,7 @@ showPlaylistbottomSheet({
                           ),
                           title: Text(
                             PlaylistKey,
-                            style: TextStyle(color: kWhite),
+                            style:const TextStyle(color: kWhite),
                           ),
                         ),
                       );
@@ -195,7 +195,7 @@ showCreatingPlaylistDialoge({
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(color: kWhite),
               )),
@@ -206,7 +206,7 @@ showCreatingPlaylistDialoge({
                 Navigator.pop(context);
               }
             },
-            child: Text(
+            child:const Text(
               'Confirm',
               style: TextStyle(color: kWhite),
             ),
