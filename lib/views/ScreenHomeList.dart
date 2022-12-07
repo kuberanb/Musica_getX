@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:get/get.dart';
+import 'package:musica/controllers/screen_home_list_controller.dart';
 import 'package:musica/functions/MiscellaneousFunctions.dart';
-import 'package:musica/models/songs.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
 import 'package:musica/views/ScreenSearch.dart';
 import 'package:musica/widgets/Song_List_Tile.dart';
@@ -17,23 +15,11 @@ class ScreenHomeList extends StatefulWidget {
 }
 
 class _ScreenHomeListState extends State<ScreenHomeList> {
-  Box<Songs> songBox = Hive.box<Songs>('Songs');
-
-  Box<List> playlistBox = Hive.box<List>('Playlist');
-
-  List<Songs> songList = [];
-
+  final screeHomeController = Get.put(ScreenHomeListController());
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    final List<int> Keys = songBox.keys.toList().cast<int>();
-
-    for (final key in Keys) {
-      songList.add(songBox.get(key)!);
-    }
-    print(songBox.length);
   }
 
   AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId('0');
@@ -59,7 +45,9 @@ class _ScreenHomeListState extends State<ScreenHomeList> {
 
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: ((context) => SearchScreen(audioPlayer: audioPlayer,)),
+                  builder: ((context) => SearchScreen(
+                        audioPlayer: audioPlayer,
+                      )),
                 ),
               );
             },
@@ -77,15 +65,15 @@ class _ScreenHomeListState extends State<ScreenHomeList> {
               showPlaylistbottomSheet(
                 context: context,
                 screenHeight: screenHeight,
-                song: songList[index],
+                song: screeHomeController.songList[index],
               );
             },
-            songList: songList,
+            songList: screeHomeController.songList,
             index: index,
             audioPlayer: audioPlayer,
           );
         },
-        itemCount: songBox.length,
+        itemCount: screeHomeController.songBox.length,
       ),
     );
   }
