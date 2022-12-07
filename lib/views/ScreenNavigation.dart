@@ -13,6 +13,8 @@ class ScreenNavigation extends StatefulWidget {
 }
 
 class ScreenNavigationState extends State<ScreenNavigation> {
+  ValueNotifier<int> indexChangeNotifier = ValueNotifier(0);
+
   
   final _bottomNavBar = const <BottomNavigationBarItem>[
     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -26,32 +28,41 @@ class ScreenNavigationState extends State<ScreenNavigation> {
     const ScreenSettings(),
   ];
 
-  int _selectedIndex = 0;
+ // int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
-          child: _screens[_selectedIndex],
+    return ValueListenableBuilder(
+      valueListenable: indexChangeNotifier,
+      builder: ((context, value, child) {
+        return  Scaffold(
+        backgroundColor: kBackgroundColor,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
+            child: _screens[indexChangeNotifier.value],
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) {
-          setState(() {
-            _selectedIndex = value;
-          });
-        },
-        currentIndex: _selectedIndex,
-        elevation: 0,
-        backgroundColor: kBottomBackgroundColor,
-        iconSize: 30,
-        selectedItemColor: kPink,
-        unselectedItemColor: kBottomIconColor,
-        items: _bottomNavBar,
-      ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (value) {
+    
+            // setState(() {
+            //   _selectedIndex = value;
+            // });
+           indexChangeNotifier.value = value;
+    
+          },
+          currentIndex: indexChangeNotifier.value,
+          elevation: 0,
+          backgroundColor: kBottomBackgroundColor,
+          iconSize: 30,
+          selectedItemColor: kPink,
+          unselectedItemColor: kBottomIconColor,
+          items: _bottomNavBar,
+        ),
+      );
+      }),
+     
     );
   }
 }

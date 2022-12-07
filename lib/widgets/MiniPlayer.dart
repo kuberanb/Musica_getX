@@ -30,7 +30,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
     return source.firstWhere((element) => element.path == fromPath);
   }
 
-   final miniPlayerController = Get.put(MiniPlayerController());
+  final miniPlayerController = Get.put(MiniPlayerController());
 
   void convertSong() {
     for (final song in widget.songList) {
@@ -73,52 +73,38 @@ class _MiniPlayerState extends State<MiniPlayer> {
     super.dispose();
   }
 
+  void playorPauseButtonPressed() {
+    if (miniPlayerController.isPlaying == true) {
+      //  setState(() async {
+      widget.audioPlayer.pause();
 
-    void playorPauseButtonPressed()  {
-      if (miniPlayerController.isPlaying == true) {
-        //  setState(() async {
-         widget.audioPlayer.pause();
-        
-          miniPlayerController.isPlaying = false;
-        
-      } else if (miniPlayerController.isPlaying == false) {
-        //
-         widget.audioPlayer.play();
-        
-          miniPlayerController.isPlaying = true;
-      
-      }
+      miniPlayerController.isPlaying = false;
+    } else if (miniPlayerController.isPlaying == false) {
+      //
+      widget.audioPlayer.play();
+
+      miniPlayerController.isPlaying = true;
     }
-
-void shuffleButtonPressed() {
-  
-      widget.audioPlayer.toggleShuffle();
-      miniPlayerController.isShuffle = !miniPlayerController.isShuffle;
-      
-  
   }
 
+  void shuffleButtonPressed() {
+    widget.audioPlayer.toggleShuffle();
+    miniPlayerController.isShuffle = !miniPlayerController.isShuffle;
+  }
 
-
-
-    void repeatButtonPressed() {
-      if (miniPlayerController.isLoop == true) {
-         widget.audioPlayer.setLoopMode(LoopMode.single);
-      } else {
-         widget.audioPlayer.setLoopMode(LoopMode.playlist);
-      }
-      
-        miniPlayerController.isLoop = !miniPlayerController.isLoop;
-      
+  void repeatButtonPressed() {
+    if (miniPlayerController.isLoop == true) {
+      widget.audioPlayer.setLoopMode(LoopMode.single);
+    } else {
+      widget.audioPlayer.setLoopMode(LoopMode.playlist);
     }
 
-
-
+    miniPlayerController.isLoop = !miniPlayerController.isLoop;
+  }
 
   @override
   Widget build(BuildContext context) {
     final Screenheight = MediaQuery.of(context).size.height;
-
 
     // void shuffleButtonPressed() {
     //   // isShuffle = !isShuffle;
@@ -138,11 +124,8 @@ void shuffleButtonPressed() {
     //   }
     // }
 
- 
-
     return widget.audioPlayer.builderCurrent(
       builder: ((context, playing) {
-        
         final myAudio = find(songAudio, playing.audio.assetAudioPath);
 
         return Container(
@@ -200,7 +183,7 @@ void shuffleButtonPressed() {
                     child: TextButton(
                       child: Text(
                         myAudio.metas.title.toString(),
-                        style:const TextStyle(color: kWhite, fontSize: 17),
+                        style: const TextStyle(color: kWhite, fontSize: 17),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -267,84 +250,71 @@ void shuffleButtonPressed() {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-
                   GetBuilder(
                     init: miniPlayerController,
                     builder: ((controller) => IconButton(
-                    onPressed: () async {
-                      shuffleButtonPressed();
-                      miniPlayerController.update();
-                    },
-                    icon: (miniPlayerController.isShuffle == true)
-                        ? const Icon(Icons.shuffle, color: kWhite, size: 32)
-                        : const Icon(Icons.shuffle, color: kPink, size: 32),
-                  )),),
-
-                      
-                  
-
-
-
+                          onPressed: () async {
+                            shuffleButtonPressed();
+                            miniPlayerController.update();
+                          },
+                          icon: (miniPlayerController.isShuffle == true)
+                              ? const Icon(Icons.shuffle,
+                                  color: kWhite, size: 32)
+                              : const Icon(Icons.shuffle,
+                                  color: kPink, size: 32),
+                        )),
+                  ),
                   IconButton(
-                      disabledColor: kWhite,
-                      focusColor: kPink,
-                      onPressed: () {
-                        widget.audioPlayer.previous();
-                      },
-                      icon:const Icon(Icons.skip_previous_rounded,
-                          color: Colors.white, size: 32),
+                    disabledColor: kWhite,
+                    focusColor: kPink,
+                    onPressed: () {
+                      widget.audioPlayer.previous();
+                    },
+                    icon: const Icon(Icons.skip_previous_rounded,
+                        color: Colors.white, size: 32),
+                  ),
+                  GetBuilder(
+                    init: miniPlayerController,
+                    builder: ((controller) => IconButton(
+                          disabledColor: kWhite,
+                          focusColor: kPink,
+                          icon: Icon(
+                            (miniPlayerController.isPlaying == true)
+                                ? Icons.pause
+                                : Icons.play_arrow,
+                            color: kWhite,
+                            size: 32,
                           ),
-
-
-                      GetBuilder(
-                        init: miniPlayerController,
-                        builder: ((controller) =>IconButton(
-                    disabledColor: kWhite,
-                    focusColor: kPink,
-                    icon: Icon(
-                      (miniPlayerController.isPlaying == true) ? Icons.pause : Icons.play_arrow,
-                      color: kWhite,
-                      size: 32,
-                    ),
-                    onPressed: () {
-                      playorPauseButtonPressed();
-                      miniPlayerController.update();
-                    },
-                  ) ),),
-
-                  
-
-
-
+                          onPressed: () {
+                            playorPauseButtonPressed();
+                            miniPlayerController.update();
+                          },
+                        )),
+                  ),
                   IconButton(
-                      disabledColor: kWhite,
-                      focusColor: kPink,
-                      onPressed: () {
-                        widget.audioPlayer.next();
-                      },
-                      icon:
-                         const Icon(Icons.skip_next, color: Colors.white, size: 32),
-                         ),
-
-                  GetBuilder(
-                    init: miniPlayerController,
-                    builder: ((controller) => IconButton(
                     disabledColor: kWhite,
                     focusColor: kPink,
-                    icon: (miniPlayerController.isLoop == true)
-                        ? const Icon(Icons.repeat, color: Colors.white, size: 32)
-                        : const Icon(Icons.repeat_one, color: Colors.white, size: 32),
                     onPressed: () {
-                      repeatButtonPressed();
-                      miniPlayerController.update();
+                      widget.audioPlayer.next();
                     },
-                  ))),
-
-      
-                  
-
-
-
+                    icon: const Icon(Icons.skip_next,
+                        color: Colors.white, size: 32),
+                  ),
+                  GetBuilder(
+                      init: miniPlayerController,
+                      builder: ((controller) => IconButton(
+                            disabledColor: kWhite,
+                            focusColor: kPink,
+                            icon: (miniPlayerController.isLoop == true)
+                                ? const Icon(Icons.repeat,
+                                    color: Colors.white, size: 32)
+                                : const Icon(Icons.repeat_one,
+                                    color: Colors.white, size: 32),
+                            onPressed: () {
+                              repeatButtonPressed();
+                              miniPlayerController.update();
+                            },
+                          ))),
                 ],
               ),
               // SizedBox(height: Screenheight * 0.09),
