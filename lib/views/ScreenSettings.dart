@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
 import 'package:musica/views/ScreenSettingTile.dart';
 import 'package:musica/widgets/SettingsTile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:share_plus/share_plus.dart';
 
 const String NOTIFICATION = 'NOTIFICATION';
@@ -83,7 +83,7 @@ class _ScreenSettingsState extends State<ScreenSettings> {
               ic: Icons.share_outlined,
               onpressed: () async {
                 Share.share(
-                    'https://play.google.com/store/apps/details?id=com.example.musica',
+                    'https://play.google.com/store/apps/details?id=in.musicplayer.musica',
                    // subject: 'Share it with your friends or Relatives ...'
                     );
               }),
