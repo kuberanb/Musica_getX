@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:musica/functions/exit_dialog_box.dart';
 import 'package:musica/palettes/ColorPalettes.dart';
 import 'package:musica/views/ScreenSettingTile.dart';
 import 'package:musica/widgets/SettingsTile.dart';
@@ -21,6 +22,7 @@ class _ScreenSettingsState extends State<ScreenSettings> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId('0');
 
@@ -38,97 +40,110 @@ class _ScreenSettingsState extends State<ScreenSettings> {
     //   await sharedPrefs.setBool(NOTIFICATION, SWITCHVALUE!);
     // }
 
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'Settings',
-          style: TextStyle(color: kWhite, fontSize: 25),
-        ),
-        backgroundColor: kBackgroundColor,
-      ),
-      body: Column(
-        children: [
-          SettingsTile(
-            text: 'About me',
-            ic: Icons.person_outline_outlined,
-            onpressed: () {
-              showAboutMe(context: context);
-            },
-          ),
-          // SizedBox(
-          //   height: 0.02 * screenHeight,
-          // ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     SettingsTile(
-          //         text: 'Notification',
-          //         ic: Icons.notifications_none_outlined,
-          //         onpressed: () {}),
-          //     Switch(
-          //       value: SWITCHVALUE!,
-          //         onChanged: (newValue) async {
-          //           setNotification(newValue);
-          //         },),
+    return WillPopScope(
+      onWillPop: () async {
+        showExitDialog(context);
 
-          //   ],
-          // ),
-          SizedBox(
-            height: 0.02 * screenHeight,
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: kBackgroundColor,
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 10,
+          automaticallyImplyLeading: false,
+          title: const Text(
+            'Settings',
+            style: TextStyle(color: kWhite, fontSize: 22),
           ),
-          SettingsTile(
-              text: 'Share',
-              ic: Icons.share_outlined,
-              onpressed: () async {
-                Share.share(
-                    'https://play.google.com/store/apps/details?id=in.musicplayer.musica',
-                   // subject: 'Share it with your friends or Relatives ...'
-                    );
-              }),
-          SizedBox(
-            height: 0.02 * screenHeight,
-          ),
-          SettingsTile(
-              text: 'Terms And Conditions',
-              ic: Icons.warning_amber_rounded,
-              onpressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return ScreenSettingTile(
-                        screenName: 'Terms And Conditions');
-                  }),
-                );
-              }),
-          SizedBox(
-            height: 0.02 * screenHeight,
-          ),
-          SettingsTile(
-              text: 'Privacy Policy',
-              ic: Icons.privacy_tip_outlined,
-              onpressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return ScreenSettingTile(screenName: 'Privacy Policy');
-                  }),
-                );
-              }),
-          const Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                'App Version 1.0.0',
-                style: TextStyle(color: Colors.grey),
+          backgroundColor: kBackgroundColor,
+        ),
+        body: SizedBox(
+          width: screenWidth,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SettingsTile(
+                text: 'About me',
+                ic: Icons.person_outline_outlined,
+                onpressed: () {
+                  showAboutMe(context: context);
+                },
               ),
-            ),
+              // SizedBox(
+              //   height: 0.02 * screenHeight,
+              // ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     SettingsTile(
+              //         text: 'Notification',
+              //         ic: Icons.notifications_none_outlined,
+              //         onpressed: () {}),
+              //     Switch(
+              //       value: SWITCHVALUE!,
+              //         onChanged: (newValue) async {
+              //           setNotification(newValue);
+              //         },),
+
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: 0.01 * screenHeight,
+              // ),
+              SettingsTile(
+                  text: 'Share',
+                  ic: Icons.share_outlined,
+                  onpressed: () async {
+                    Share.share(
+                      'https://play.google.com/store/apps/details?id=in.musicplayer.musica',
+                      // subject: 'Share it with your friends or Relatives ...'
+                    );
+                  }),
+              // SizedBox(
+              //   height: 0.01 * screenHeight,
+              // ),
+              SettingsTile(
+                  text: 'Terms And Conditions',
+                  ic: Icons.warning_amber_rounded,
+                  onpressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ScreenSettingTile(
+                            screenName: 'Terms And Conditions');
+                      }),
+                    );
+                  }),
+              // SizedBox(
+              //   height: 0.01 * screenHeight,
+              // ),
+              SettingsTile(
+                  text: 'Privacy Policy',
+                  ic: Icons.privacy_tip_outlined,
+                  onpressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ScreenSettingTile(screenName: 'Privacy Policy');
+                      }),
+                    );
+                  }),
+              const Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    'App Version 1.0.2',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 0.02 * screenHeight,
+              ),
+            ],
           ),
-          SizedBox(
-            height: 0.02 * screenHeight,
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -148,13 +163,14 @@ showAboutMe(
           style: TextStyle(color: kWhite, fontSize: 24),
         ),
         content: const Text(
-          '''I am Kuberan B, A Flutter Developer         
-who Designed and Developed this Music Player APP 
-
-
-To Contact : Kuberanbaluchami@gmail.com
+          '''"Greetings! 
+ I'm Kuberan, the creative mind behind this Music Player app, meticulously crafted with Flutter. If you wish to get in touch or have any questions, feel free to reach out to me at Kuberanb2000@gmail.com."  
         ''',
-          style: TextStyle(color: kWhite, fontSize: 16),
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            color: kWhite,
+            fontSize: 16,
+          ),
         ),
         actions: [
           TextButton(

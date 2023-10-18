@@ -26,19 +26,19 @@ class SettingsTile extends StatelessWidget {
           icon: Icon(
             ic,
             color: kPink,
-            size: 40 * textscale,
+            size: 22 * textscale, 
           ),
           onPressed: onpressed,
-        ),
-        SizedBox(
-          width: 0.03 * screenWidth,
-        ),
+        ), 
+        // SizedBox(
+        //   width: 0.01 * screenWidth,  
+        // ),
         TextButton(
+          onPressed: onpressed,
           child: Text(
             text,
-            style: TextStyle(color: kWhite, fontSize: 22 * textscale),
+            style: TextStyle(color: kWhite, fontSize: 18 * textscale), 
           ),
-          onPressed: onpressed,
         ),
       ],
     );
